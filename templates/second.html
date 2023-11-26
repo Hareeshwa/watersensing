@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Container for buttons and table */
+      .container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      /* Buttons */
+      .button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      /* Add hover effect to buttons */
+      .button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Table for input */
+      table {
+        display: none;
+        border-collapse: collapse;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+      }
+
+      /* Input fields */
+      input[type="number"] {
+        width: 60px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        text-align: center;
+      }
+
+      /* Submit button style */
+      .submit-button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+
+      /* Submit button hover effect */
+      .submit-button:hover {
+        background-color: #0056b3;
+      }
+
+      .node {
+        cursor: pointer;
+      }
+
+      .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+      }
+
+      .node text {
+        font: 12px sans-serif;
+      }
+
+      .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+      }
+      #tableRF1 {
+        width: 200px;
+      }
+      #senderTableContainer {
+        min-height: 100px;
+      }
+      .sender-table {
+        display: block;
+      }
+      #sendersenderTableContainer {
+        min-height: 100px;
+      }
+      .sender-sender-table {
+        display: block;
+      }
+      .sender-input{
+        width 50px;
+      }
+      #senderDatatable{
+        position: absolute;
+        right:20vw;
+        top:30vh;
+        display:flex;
+        width:20vw;
+        justify-content: flex-end;
+      }
+      .graph{
+        height:500px !important;
+        width:600px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <input type="file" id="fileInput" />
+    <br />
+    <br />
+    <div class="container">
+      <!-- Button 1 -->
+      <button class="button" id="rf1Button">rf1</button>
+
+      <!-- Table 1 for input -->
+      <table id="rf1Table">
+        <thead>
+          <tr>
+            <th>Receivers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="number" id="rf1ReceiversInput" /></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">
+              <button class="submit-button" id="submitRF1">Submit</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div id="tableRF1"></div>
+
+      <div id="sendersTableRF1"></div>
+
+      <div id="senderssendersTableRF1"></div>
+
+      <!-- Diagram container for Button 1 -->
+      <div id="diagramRF1"></div>
+
+      <!-- Button 2 -->
+      <button class="button" id="IITOButton">IITO</button>
+
+      <!-- Table 2 for input -->
+      <table id="IITOTable">
+        <thead>
+          <tr>
+            <th>Receivers</th>
+            <th>Senders</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="number" id="IITOReceiversInput" /></td>
+            <td><input type="number" id="IITOSendersInput" /></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">
+              <button class="submit-button" id="submitIITO">Submit</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- Diagram container for Button 2 -->
+      <div id="diagramIITO"></div>
+
+      <!-- Button 3 -->
+      <button class="button" id="weatherButton">Weather</button>
+
+      <!-- Table 3 for input -->
+      <table id="weatherTable">
+        <thead>
+          <tr>
+            <th>Receivers</th>
+            <th>Senders</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="number" id="weatherReceiversInput" /></td>
+            <td><input type="number" id="weatherSendersInput" /></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">
+              <button class="submit-button" id="submitWeather">Submit</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- Diagram container for Button 3 -->
+      <div id="diagramWeather"></div>
+
+      <br />
+    </div>
+    <div id="senderDatatable"></div>
+    <br />
+    <canvas id="myLineChart" class="graph"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script
+      lang="javascript"
+      src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"
+    ></script>
+
+    <script>
+      function displayGraph(sensor) {
+        console.log(
+          sensor,
+          data[sensor][0]["M1"],
+          data[sensor][1]["M1"],
+          data[sensor][2]["M1"],
+          data[sensor][3]["M1"],
+          data[sensor][4]["M1"]
+        );
+        var graphData = {
+          labels: ["T-1", "T-2", "T-3", "T-4", "T-5"],
+          datasets: [
+            {
+              label: "Time vs M1",
+              borderColor: "rgba(75, 192, 192, 1)",
+              data: [
+                data[sensor][0]["M1"],
+                data[sensor][1]["M1"],
+                data[sensor][2]["M1"],
+                data[sensor][3]["M1"],
+                data[sensor][4]["M1"],
+              ],
+              borderWidth: 1,
+            },
+            {
+              label: "Time vs M2",
+              borderColor: "rgba(255, 99, 132, 1)",
+              data: [
+                data[sensor][0]["M2"],
+                data[sensor][1]["M2"],
+                data[sensor][2]["M2"],
+                data[sensor][3]["M2"],
+                data[sensor][4]["M2"],
+              ],
+              fill: false,
+            },
+            {
+              label: "Time vs T1",
+              borderColor: "rgba(255, 205, 86, 1)",
+              data: [
+                data[sensor][0]["T1"],
+                data[sensor][1]["T1"],
+                data[sensor][2]["T1"],
+                data[sensor][3]["T1"],
+                data[sensor][4]["T1"],
+              ],
+              fill: false,
+            },
+            {
+              label: "Time vs T2",
+              borderColor: "rgba(255, 159, 64, 1)",
+              data: [
+                data[sensor][0]["T2"],
+                data[sensor][1]["T2"],
+                data[sensor][2]["T2"],
+                data[sensor][3]["T2"],
+                data[sensor][4]["T2"],
+              ],
+              fill: false,
+            },
+          ],
+        };
+
+        // Get the context of the canvas element
+        var ctx = document.getElementById("myLineChart");
+        // Create a line chart
+        window.myLineChart = new Chart(ctx, {
+          type: "line",
+          data: graphData,
+          options: {},
+        });
+      }
+
+      function destroyGraphs() {
+        if (window.myLineChart) {
+          window.myLineChart.destroy();
+        }
+      }
+
+      function createTable(dataObject, tableTitle) {
+        var tableContainer = document.getElementById("senderDatatable");
+
+        while (tableContainer.firstChild) {
+          tableContainer.removeChild(tableContainer.firstChild);
+        }
+
+        var table = document.createElement("table");
+
+        var caption = table.createCaption();
+        caption.textContent = tableTitle || "";
+
+        var headerRow = table.insertRow(0);
+
+        Object.keys(dataObject[0]).forEach(function (key) {
+          var headerCell = headerRow.insertCell();
+          headerCell.textContent = key;
+        });
+
+        for (var i = 0; i < dataObject.length; i++) {
+          var dataRow = table.insertRow();
+          Object.values(dataObject[i]).forEach(function (value) {
+            var dataCell = dataRow.insertCell();
+            dataCell.textContent = value;
+          });
+        }
+
+        table.style.display = "block";
+
+        tableContainer.appendChild(table);
+      }
+
+      // Create an object to store the data
+      var data = {};
+      function parseLine(line) {
+        // Split the line by '>'
+        const parts = line.split("'")[1].split(",");
+        // Extract values and form key-value object
+        const result = {
+          M1: parseFloat(parts[3]),
+          M2: parseFloat(parts[5]),
+          T1: parseFloat(parts[7]),
+          T2: parseFloat(parts[9]),
+        };
+
+        return result;
+      }
+
+      // Function to process the text file
+      function processTextFile(fileContent) {
+        const lines = fileContent.split("\\r");
+
+        const transmitter1Lines = lines
+          .filter((line) => line.includes("Sender 1"))
+          .slice(-5);
+        const transmitter2Lines = lines
+          .filter((line) => line.includes("Sender 2"))
+          .slice(-5);
+
+        var finalData = {};
+        finalData["S1"] = [];
+        finalData["S2"] = [];
+        transmitter1Lines.forEach((line) => {
+          const dataObject = parseLine(line);
+          finalData["S1"].push(dataObject);
+        });
+        transmitter2Lines.forEach((line) => {
+          const dataObject = parseLine(line);
+          finalData["S2"].push(dataObject);
+        });
+        data = finalData;
+        console.log(finalData);
+      }
+
+      async function readFile() {
+        const filePath = "./data/Hydra_Sense.txt"; // Replace with the actual file name
+        console.log("nscjkcbkcb");
+        await fetch(filePath, { mode: "no-cors" })
+          .then(async (response) => {
+            return await response.text();
+          })
+          .then((fileContent) => {
+            processTextFile(fileContent);
+          })
+          .catch((error) => console.error("Error fetching the file:", error));
+      }
+
+      // Call the function to read and process the text file
+      readFile();
+
+      // Function to show the input table for a specific button and clear previous values
+      function showInputTable(tableId) {
+        // Hide all tables first
+        const tables = document.querySelectorAll("table");
+        tables.forEach((table) => {
+          table.style.display = "none";
+        });
+
+        // Clear previous values
+        const inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach((input) => {
+          input.value = "";
+        });
+
+        // Show the specific table next to the clicked button
+        const selectedTable = document.getElementById(tableId);
+        selectedTable.style.display = "table";
+      }
+
+      // Function to generate the diagram
+      function generateDiagram(
+        containerId,
+        receivers,
+        senders,
+        sendersenderValues
+      ) {
+        var treeData = [
+          {
+            name: "Rasberg",
+
+            children: [],
+          },
+        ];
+
+        // Clear the existing diagram, if any
+        d3.select(containerId).html("");
+
+        var margin = { top: 20, right: 120, bottom: 20, left: 120 },
+          width = 960 - margin.right - margin.left,
+          height = 500 - margin.top - margin.bottom;
+
+        var i = 0,
+          duration = 750,
+          root;
+
+        var tree = d3.layout.tree().size([height, width]);
+
+        var diagonal = d3.svg.diagonal().projection(function (d) {
+          return [d.y, d.x];
+        });
+
+        var svg = d3
+          .select("body")
+          .append("svg")
+          .attr("width", width + margin.right + margin.left)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          );
+
+        root = treeData[0];
+        root.x0 = height / 2;
+        root.y0 = 0;
+
+        function addChild(parentNode, childName) {
+          const childNode = parentNode.children
+            ? parentNode.children[parentNode.children.length - 1]
+            : null;
+
+          if (
+            childNode &&
+            childNode.data &&
+            childNode.data.name === childName
+          ) {
+            // Node with the same name already exists, no need to add it again.
+            return;
+          }
+
+          // Add the child node
+          const newChild = { name: childName };
+
+          if (!parentNode.children) {
+            parentNode.children = [newChild];
+          } else {
+            parentNode.children.push(newChild);
+          }
+        }
+
+        for (let i = 0; i < receivers; i++) {
+          addChild(root, `Receiver ${i + 1}`);
+          for (let j = 0; j < senders[i]; j++) {
+            addChild(root.children[i], `Sender ${j + 1}`);
+            for (let k = 0; k < sendersenderValues[i][j]; k++) {
+              //only if there are 4 sensors: change logic otherwise
+              k < 2
+                ? addChild(root.children[i].children[j], "M " + (k + 1))
+                : addChild(root.children[i].children[j], "T " + (k - 1));
+            }
+          }
+        }
+
+        update(root);
+
+        d3.select(self.frameElement).style("height", "500px");
+
+        function update(source) {
+          // Compute the new tree layout.
+          var nodes = tree.nodes(root).reverse(),
+            links = tree.links(nodes);
+
+          // Normalize for fixed-depth.
+          nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+          });
+
+          // Update the nodes…
+          var node = svg.selectAll("g.node").data(nodes, function (d) {
+            return d.id || (d.id = ++i);
+          });
+
+          // Enter any new nodes at the parent's previous position.
+          var nodeEnter = node
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+              return "translate(" + source.y0 + "," + source.x0 + ")";
+            })
+            .on("click", click);
+
+          nodeEnter
+            .append("circle")
+            .attr("r", 1e-6)
+            .style("fill", function (d) {
+              return d._children ? "lightsteelblue" : "#fff";
+            });
+
+          nodeEnter
+            .append("text")
+            .attr("x", function (d) {
+              return d.children || d._children ? -13 : 13;
+            })
+            .attr("dy", ".35em")
+            .attr("text-anchor", function (d) {
+              return d.children || d._children ? "end" : "start";
+            })
+            .text(function (d) {
+              return d.name;
+            })
+            .style("fill-opacity", 1e-6);
+
+          // Transition nodes to their new position.
+          var nodeUpdate = node
+            .transition()
+            .duration(duration)
+            .attr("transform", function (d) {
+              return "translate(" + d.y + "," + d.x + ")";
+            });
+
+          nodeUpdate
+            .select("circle")
+            .attr("r", 10)
+            .style("fill", function (d) {
+              return d._children ? "lightsteelblue" : "#fff";
+            });
+
+          nodeUpdate.select("text").style("fill-opacity", 1);
+
+          // Transition exiting nodes to the parent's new position.
+          var nodeExit = node
+            .exit()
+            .transition()
+            .duration(duration)
+            .attr("transform", function (d) {
+              return "translate(" + source.y + "," + source.x + ")";
+            })
+            .remove();
+
+          nodeExit.select("circle").attr("r", 1e-6);
+
+          nodeExit.select("text").style("fill-opacity", 1e-6);
+
+          // Update the links…
+          var link = svg.selectAll("path.link").data(links, function (d) {
+            return d.target.id;
+          });
+
+          // Enter any new links at the parent's previous position.
+          link
+            .enter()
+            .insert("path", "g")
+            .attr("class", "link")
+            .attr("d", function (d) {
+              var o = { x: source.x0, y: source.y0 };
+              return diagonal({ source: o, target: o });
+            });
+
+          // Transition links to their new position.
+          link.transition().duration(duration).attr("d", diagonal);
+
+          // Transition exiting nodes to the parent's new position.
+          link
+            .exit()
+            .transition()
+            .duration(duration)
+            .attr("d", function (d) {
+              var o = { x: source.x, y: source.y };
+              return diagonal({ source: o, target: o });
+            })
+            .remove();
+
+          // Stash the old positions for transition.
+          nodes.forEach(function (d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+          });
+        }
+
+        function shortName(name) {
+          var [code, num] = name.split(" ");
+
+          code = code[0];
+          num = num;
+
+          return code + num;
+        }
+
+        // Toggle children on click.
+        async function click(d) {
+          if (d.children) {
+            d._children = d.children;
+            d.children = null;
+          } else {
+            d.children = d._children;
+            d._children = null;
+            //var columnName = shortName(d.parent.parent.name);
+            //columnName += shortName(d.parent.name);
+
+            //columnName += shortName(d.name);
+            //console.log(columnName);
+            if (d.name.startsWith("Sender")) {
+              const num = shortName(d.name).slice(1);
+              const tableTitle = "Sender " + num;
+              console.log(tableTitle);
+              console.log(data["S" + num]);
+              createTable(data["S" + num], tableTitle);
+              //destroyGraphs();
+              displayGraph("S" + num);
+            } else {
+              const transmitter = "S" + shortName(d.parent.name).slice(1);
+              const sensor = shortName(d.name);
+
+              const value = data[transmitter][sensor];
+              console.log(value);
+            }
+          }
+          update(d);
+        }
+      }
+
+      // Add click event listeners to each button
+      document.getElementById("rf1Button").addEventListener("click", () => {
+        showInputTable("rf1Table");
+      });
+
+      document.getElementById("IITOButton").addEventListener("click", () => {
+        showInputTable("IITOTable");
+      });
+
+      document.getElementById("weatherButton").addEventListener("click", () => {
+        showInputTable("weatherTable");
+      });
+
+      function createSenderSenderTable(numReceivers, senderValues) {
+        const tableContainer = document.createElement("div");
+        tableContainer.id = "sendersenderTableContainer";
+
+        const table = document.createElement("table");
+        table.className = "sender-sender-table";
+
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        const receiverHeader = document.createElement("th");
+        receiverHeader.textContent = "Child Receivers";
+        headerRow.appendChild(receiverHeader);
+
+        const senderHeader = document.createElement("th");
+        senderHeader.textContent = "Sensors";
+        headerRow.appendChild(senderHeader);
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        //console.log("start");
+        const tbody = document.createElement("tbody");
+        for (let i = 1; i <= numReceivers; i++) {
+          //console.log("i", senderValues[i - 1], typeof senderValues[i - 1]);
+          for (let j = 1; j <= senderValues[i - 1]; j++) {
+            //console.log("j");
+            // Receiver cell
+            const row = document.createElement("tr");
+            const receiverCell = document.createElement("td");
+            receiverCell.textContent = "Receiver " + i + "-" + j;
+            row.appendChild(receiverCell);
+
+            // Sender cell
+            const senderCell = document.createElement("td");
+            const senderInput = document.createElement("input");
+            senderInput.type = "number";
+            senderInput.id = "senderInput" + i + "-" + j;
+            senderInput.className = "sender-input";
+            senderCell.appendChild(senderInput);
+            row.appendChild(senderCell);
+
+            tbody.appendChild(row);
+          }
+        }
+        //console.log("end");
+
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+
+        const submitsenders = document.createElement("button");
+        submitsenders.id = "childrecieversButton";
+        submitsenders.className = "button";
+        submitsenders.textContent = "Submit";
+
+        tableContainer.appendChild(submitsenders);
+
+        // Append the table container to your HTML (assuming you have a parent element with an ID)
+        const parentElement = document.getElementById("sendersTableRF1"); // Replace with your parent element ID
+        parentElement.appendChild(tableContainer);
+
+        submitsenders.addEventListener("click", () => {
+          //console.log(numReceivers);
+
+          // Create an array to store sender values
+          const sendersenderValues = [];
+
+          // Loop through the sender input fields and log their values
+          for (let i = 1; i <= numReceivers; i++) {
+            var s = [];
+            //console.log("out", senderValues[i - 1]);
+            for (let j = 1; j <= senderValues[i - 1]; j++) {
+              const senderInput = document.getElementById(
+                "senderInput" + i + "-" + j
+              );
+              const senderValue = parseInt(senderInput.value);
+              //console.log("in", senderValue);
+              s.push(senderValue);
+            }
+            sendersenderValues.push(s);
+          }
+
+          //console.log("Number of Receivers: " + numReceivers);
+          //console.log("Sender-sender Values:", sendersenderValues);
+
+          generateDiagram(
+            "diagramRF1",
+            numReceivers,
+            senderValues,
+            sendersenderValues
+          );
+
+          table.style.display = "none";
+          submitsenders.style.display = "none";
+          const tables = document.querySelectorAll("table");
+          tables.forEach((table) => {
+            table.style.display = "none";
+          });
+        });
+      }
+
+      function createSenderTable(numReceivers) {
+        const tableContainer = document.createElement("div");
+        tableContainer.id = "senderTableContainer";
+
+        // Create a table element
+        const table = document.createElement("table");
+        table.className = "sender-table";
+
+        // Create table headers
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        const receiverHeader = document.createElement("th");
+        receiverHeader.textContent = "Receiver";
+        headerRow.appendChild(receiverHeader);
+
+        const senderHeader = document.createElement("th");
+        senderHeader.textContent = "Senders";
+        headerRow.appendChild(senderHeader);
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create table body rows
+        const tbody = document.createElement("tbody");
+        for (let i = 1; i <= numReceivers; i++) {
+          const row = document.createElement("tr");
+
+          // Receiver cell
+          const receiverCell = document.createElement("td");
+          receiverCell.textContent = "Receiver " + i;
+          row.appendChild(receiverCell);
+
+          // Sender cell
+          const senderCell = document.createElement("td");
+          const senderInput = document.createElement("input");
+          senderInput.type = "number";
+          senderInput.id = "senderInput" + i;
+          senderInput.className = "sender-input";
+          senderCell.appendChild(senderInput);
+          row.appendChild(senderCell);
+
+          tbody.appendChild(row);
+        }
+
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+
+        const submitsenders = document.createElement("button");
+        submitsenders.id = "recieversButton";
+        submitsenders.className = "button";
+        submitsenders.textContent = "Submit";
+
+        tableContainer.appendChild(submitsenders);
+
+        // Append the table container to your HTML (assuming you have a parent element with an ID)
+        const parentElement = document.getElementById("tableRF1"); // Replace with your parent element ID
+        parentElement.appendChild(tableContainer);
+
+        submitsenders.addEventListener("click", () => {
+          //console.log(numReceivers);
+
+          // Create an array to store sender values
+          const senderValues = [];
+
+          // Loop through the sender input fields and log their values
+          for (let i = 1; i <= numReceivers; i++) {
+            const senderInput = document.getElementById("senderInput" + i);
+            const senderValue = parseInt(senderInput.value);
+            senderValues.push(senderValue);
+          }
+
+          //console.log("Number of Receivers: " + numReceivers);
+          //console.log("Sender Values:", senderValues);
+
+          createSenderSenderTable(numReceivers, senderValues);
+        });
+      }
+
+      // Call the function when Submit buttons are clicked
+      document.getElementById("submitRF1").addEventListener("click", () => {
+        const receivers = parseInt(
+          document.getElementById("rf1ReceiversInput").value
+        );
+        createSenderTable(receivers);
+        //generateDiagram("#diagramRF1", receivers, senders);
+      });
+
+      document.getElementById("submitIITO").addEventListener("click", () => {
+        const receivers = parseInt(
+          document.getElementById("IITOReceiversInput").value
+        );
+        const senders = parseInt(
+          document.getElementById("IITOSendersInput").value
+        );
+        generateDiagram("#diagramIITO", receivers, senders);
+      });
+
+      document.getElementById("submitWeather").addEventListener("click", () => {
+        const receivers = parseInt(
+          document.getElementById("weatherReceiversInput").value
+        );
+        const senders = parseInt(
+          document.getElementById("weatherSendersInput").value
+        );
+        generateDiagram("#diagramWeather", receivers, senders);
+      });
+    </script>
+  </body>
+</html>
