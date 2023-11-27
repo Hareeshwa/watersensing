@@ -114,16 +114,57 @@
         height:500px !important;
         width:600px !important;
       }
+      .navbar{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding: 0px 1vw 0px 1vw;
+        background:#0dcaf0;
+        color:white;
+      }
+      .logo{
+        padding:2rem;
+        flex:1;
+        text-align:center;
+      }
+      .navbar-right{
+        padding:1rem;
+        display:flex;
+        text-align:center;
+        align-items:center;
+      }
+      .iit-logo{
+        height:90px;
+        width:90px;
+        padding:1rem;
+      }
+      .graph-container{
+        display:flex;
+        justify-content:space-around;
+      }
     </style>
   </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <input type="file" id="fileInput" />
+
+    <div class="navbar">
+      <h1 class="logo">Water Sensing</h1>
+
+      <div class="navbar-right">
+        <img src="./images/iit-logo.png" alt="iit-logo" class="iit-logo" />
+        <div>
+          <p>Agricultural and Food Engineering</p>
+          <p>Indian Institute of Technology</p>
+          <p>Kharagpur</p>
+        </div>
+      </div>
+    </div>
+
     <br />
     <br />
-    <div class="container">
+    <div class="container" id="c2">
       <!-- Button 1 -->
-      <button class="button" id="rf1Button">rf1</button>
+      <button class="button" id="rf1Button">Rf1</button>
 
       <!-- Table 1 for input -->
       <table id="rf1Table">
@@ -217,7 +258,8 @@
     </div>
     <div id="senderDatatable"></div>
     <br />
-    <canvas id="myLineChart" class="graph"></canvas>
+
+    <div id="graph-container"><div/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
     <script
@@ -227,14 +269,6 @@
 
     <script>
       function displayGraph(sensor) {
-        console.log(
-          sensor,
-          data[sensor][0]["M1"],
-          data[sensor][1]["M1"],
-          data[sensor][2]["M1"],
-          data[sensor][3]["M1"],
-          data[sensor][4]["M1"]
-        );
         var graphData = {
           labels: ["T-1", "T-2", "T-3", "T-4", "T-5"],
           datasets: [
@@ -277,6 +311,7 @@
             {
               label: "Time vs T2",
               borderColor: "rgba(255, 159, 64, 1)",
+              fontSize: 50,
               data: [
                 data[sensor][0]["T2"],
                 data[sensor][1]["T2"],
@@ -289,13 +324,33 @@
           ],
         };
 
+        var ctx = document.createElement("canvas");
+        ctx.id = "myLineChart";
+        ctx.classList.add("graph");
+
+        // Get the div element with id "c2"
+        //var targetDiv = document.getElementById("graph-container");
+        var targetDiv = document.body;
+
+        // Append the new canvas to the div
+        targetDiv.appendChild(ctx);
+
         // Get the context of the canvas element
-        var ctx = document.getElementById("myLineChart");
         // Create a line chart
         window.myLineChart = new Chart(ctx, {
           type: "line",
           data: graphData,
-          options: {},
+          options: {
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    size: 32,
+                  },
+                },
+              },
+            },
+          },
         });
       }
 
@@ -423,7 +478,7 @@
       ) {
         var treeData = [
           {
-            name: "Rasberg",
+            name: "Raspberry Pi",
 
             children: [],
           },

@@ -36,7 +36,7 @@
       .logo h1 {
         font-size: 2.5rem;
         color: var(--mainColor); /* Use your main color here */
-        margin-right: auto; 
+        margin-right: auto;
       }
 
       .logo-image img {
@@ -44,8 +44,7 @@
         height: 50px; /* Adjust the height to your preferred size */
         margin-right: auto; /* Add spacing between the logo and the "Water Sensing" text */
         margin-left: auto;
-      
-}
+      }
 
       .nav-links {
         list-style: none;
@@ -300,6 +299,35 @@
           z-index: 1;
         }
       }
+
+      .logo-image {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        font-size: 16px;
+      }
+      .logo-image img {
+        height: 90px;
+        width: 90px;
+        padding: 1rem;
+      }
+      .para {
+        position: absolute;
+        top: 35vh;
+        width: 20vw;
+        left: 10vw;
+        font-size: 16px;
+        color: white;
+      }
+      #login-pic {
+        position: absolute;
+        top: 35vh;
+        height: 35vh;
+        width: 25vw;
+        right: 7vw;
+        font-size: 16px;
+        color: white;
+      }
     </style>
     <script>
       let wrapper = document.querySelector(".wrapper"),
@@ -324,14 +352,33 @@
         <div class="logo">
           <h1>Water Sensing</h1>
         </div>
-        <nav>
-          <div class="logo-image">
-            <img src="https://s.yimg.com/fz/api/res/1.2/u6ttTktwRTW05m7NSsu63Q--~C/YXBwaWQ9c3JjaGRkO2ZpPWZpdDtoPTI2MDtxPTgwO3c9MjMw/https://s.yimg.com/zb/imgv1/270dc153-bbfc-3864-814f-707bf3ef184f/t_500x300" alt="Logo" width="50" height="50" />
+        <div class="logo-image">
+          <img
+            src="https://s.yimg.com/fz/api/res/1.2/u6ttTktwRTW05m7NSsu63Q--~C/YXBwaWQ9c3JjaGRkO2ZpPWZpdDtoPTI2MDtxPTgwO3c9MjMw/https://s.yimg.com/zb/imgv1/270dc153-bbfc-3864-814f-707bf3ef184f/t_500x300"
+            alt="Logo"
+            width="50"
+            height="50"
+          />
+          <div>
+            <p>Agricultural and Food Engineering</p>
+            <p>Indian Institute of Technology</p>
+            <p>Kharagpur</p>
           </div>
-        </nav>
-        
+        </div>
       </nav>
     </header>
+    <div class="para">
+      <p>
+        Welcome to the Water Sensing Portal, your go-to for vital water data. In
+        our water-scarce world, monitoring is essential. Our portal utilizes
+        advanced technology to track water quality, quantity, and usage, aiding
+        informed decision-making. Access real-time and historical data,
+        empowering you to monitor pollution, understand usage patterns, and make
+        impactful water management decisions. Join for free today and contribute
+        to conserving our precious water resources. Explore, learn, and make a
+        difference in water conservation.
+      </p>
+    </div>
     <div class="wrapper">
       <div class="form-container sign-up">
         <form action="#">
@@ -393,6 +440,14 @@
         </form>
       </div>
     </div>
+
+    <img
+      src="./images/login-pic.jpg"
+      alt="Logo"
+      width="50"
+      height="50"
+      id="login-pic"
+    />
     <script
       src="https://kit.fontawesome.com/9e5ba2e3f5.js"
       crossorigin="anonymous"
